@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+footer{
+    background-color: black;
+}
+
 .fondo{
-    background-color: #b5b7ba;     
+    background-color: rgb(154, 158, 166);    
+}
+
+.carousel {
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.carousel-item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
 }

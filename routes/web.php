@@ -8,7 +8,7 @@ Route::view("/",'welcome')->name('welcome');
 Route::view("/about",'about')->name('about');
 Route::view("/services",'services')->name('services');
 Route::view("/contact",'contact')->name('contact');
-Route::view("/galery",'galery')->name('galery'); 
+Route::view("/gallery",'gallery')->name('gallery'); 
 Route::view("/blog",'blog')->name('blog');
  
 
