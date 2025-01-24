@@ -3,7 +3,7 @@
 <div class="bg-white p-2 overflow-auto h-screen">
     <div class="flex justify-between items-center">
         <h2 class="text-2xl mb-4">Media</h2>
-        <a href="#" class="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">add new</a>
+        <a href="{{ url('/media') }}" class="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">add new</a>
     </div>
     <!-- Classes Table -->
     <div class="relative overflow-auto">

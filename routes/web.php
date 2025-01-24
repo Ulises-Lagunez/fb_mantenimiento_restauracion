@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MediaController;   
 use Illuminate\Support\Facades\Route;
 
-// mis rutas
+// mis rutas para FB 
 Route::view("/",'welcome')->name('welcome');
 Route::view("/about",'about')->name('about');
 Route::view("/services",'services')->name('services');
@@ -22,5 +23,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// rutas para crear un nuevo medio 
+
+Route::get('/media', [MediaController::class, 'create'])->name('media');  
+
+Route::post('/media/create', [MediaController::class, 'storage'])->name('media.create');  
 
 require __DIR__.'/auth.php';
