@@ -10,7 +10,7 @@
 
     <div class="flex items-center justify-center p-12">
         <div class="mx-auto w-full max-w-[550px] bg-black rounded-2xl">
-            <form action="{{ url('/media/create') }}" method="post">
+            <form action="{{ route('media.create') }}" method="post">
                 @csrf
                 <div class="m-6">
                     <label for="name" class="mb-3 block text-base font-medium text-[#dadada]">Nombre</label>

@@ -14,9 +14,7 @@ Route::view("/blog",'blog')->name('blog');
  
 
 // rutas de autenticación
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [MediaController::class,'index'])->middleware('auth', 'verified')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,8 +24,7 @@ Route::middleware('auth')->group(function () {
 
 // rutas para crear un nuevo medio 
 
-Route::get('/media', [MediaController::class, 'create'])->name('media');  
-
-Route::post('/media/create', [MediaController::class, 'storage'])->name('media.create');  
+Route::get('media.create', [MediaController::class,'create'])->name('media.create');
+Route::post('media.create', [MediaController::class,'storage'])->name('media.create');  
 
 require __DIR__.'/auth.php';

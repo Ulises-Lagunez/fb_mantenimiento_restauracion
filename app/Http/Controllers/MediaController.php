@@ -13,18 +13,19 @@ class MediaController extends BaseController
         $this->middleware('auth');
     } 
 
+    /** funcion para get index*/
+    public function index()
+    {
+        $media = Media::all();
+        return view('dashboard', compact('media'));
+    }
+
     /** funcion para get create*/
     public function create()
     {
         return view('media_new');
     }
-    /** funcion para desplegar todos los datos de la tabla */
-    public function show()
-    {
-        $media = Media::all();
-        print_r($media);
-        return view('dashboard');
-    }
+    
 
    /** funcion para crear un registro en la tabla*/
     public function storage(Request $request)    
@@ -34,27 +35,17 @@ class MediaController extends BaseController
             'image' => 'required',
             'description' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        $media = new Media;
-    
-        if ($image = $request->file('image')) {
-            $media->name = $request->name;
-            $destinationPath = 'storage/';
-            $profileImage = $request->name . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
-            $media->image = "$profileImage";
-            $media->description = $request->description;
-            $media->save();
-            return redirect()->route('dashboard')
-                         ->with('success', 'Product created successfully.');
-        }
-        else{
-            return redirect('dashboard')    
-                ->with('error','Error al subir la imagen');
+        $nuevo = new Media();
+        $nuevo = $request->all();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/storage');
+            $image->move($destinationPath, $name);
+            $nuevo['image'] = $name;
         }   
-        
-       
-        
+        Media::create($nuevo);
+        return redirect()->route('dashboard', compact('media'))->with('success', 'Media created successfully.');
     }
 
     /** funcion para actualizar un registro en la tabla*/
