@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="titleH">
-        Crear Medio
+        Editar Medio
     </x-slot>
     @if ($errors->any())
         @foreach ($errors as $error)
@@ -10,7 +10,7 @@
     
     <x-formulario :media="$media">
         <x-slot name='accion'>
-            /media
+            /media/edit/{{$media->id}}
         </x-slot>
         <x-slot name='metodo'>
             POST

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->id()->cascadeOnDelete();    
+            $table->id();
             $table->string('name');
-            $table->string('image');     
+            $table->string('image');
+            $table->enum('section',['app','carpinteria','plomeria','aire-acond']);
             $table->string('description');
             $table->timestamps();
-        });
+        }); 
     }
 
     /**

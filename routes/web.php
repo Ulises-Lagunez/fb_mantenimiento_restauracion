@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MediaController;   
+use App\Http\Controllers\MediaController;      
 use Illuminate\Support\Facades\Route;
 
 // mis rutas para FB 
@@ -24,7 +24,21 @@ Route::middleware('auth')->group(function () {
 
 // rutas para crear un nuevo medio 
 
-Route::get('media.create', [MediaController::class,'create'])->name('media.create');
-Route::post('media.create', [MediaController::class,'storage'])->name('media.create');  
+Route::get('/media/create', [MediaController::class, 'create'])->middleware('auth')->name('media.create');
+
+// ruta para almacenar nuevo medio
+
+Route::post('/media', [MediaController::class, 'store'])->middleware('auth')->name('media.store');
+
+//ruta para editar un medio
+
+Route::get('/media/edit/{$id}', [MediaController::class, 'edit'])->middleware('auth')->name('media.edit');
+
+// RUTA PARA ACTUALIZAR UN MEDIO
+
+Route::put('/media/{$id}', [MediaController::class, 'update'])->middleware('auth')->name('media.update');
+
+// Ruta para eliminar un medio
+Route::delete('/media/delete/{$id}', [MediaController::class,'delete'])->middleware('auth')->name('media.destroy');
 
 require __DIR__.'/auth.php';

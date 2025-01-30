@@ -1,77 +1,77 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Media;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
-class MediaController extends BaseController
+class MediaController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    } 
 
-    /** funcion para get index*/
+    // FUNCIÓN INDEX PARA ENVIAR MEDIOS A DASHBOARD
+
     public function index()
     {
         $media = Media::all();
-        return view('dashboard', compact('media'));
+        return view('dashboard',compact('media'));
     }
 
-    /** funcion para get create*/
+    // FUNCIÓN PARA CREAR UN NUEVO MEDIO
+
     public function create()
     {
-        return view('media_new');
+        $media = new Media();
+        return view('media_new', compact('media'));
     }
-    
 
-   /** funcion para crear un registro en la tabla*/
-    public function storage(Request $request)    
+    // FUNCIÓN PARA ALMACENAR NUEVO MEDIO EN BASE DE DATOS
+    
+    public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'image' => 'required',
-            'description' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'required|unique:media',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048|unique:media',
+            'section' => 'required',
+            'description' => 'required'
+        ],
+        [
+            'name.required' => 'Se requiere un nombre para el registro.',
+            'name.unique' => 'El nombre ya existe.',
+            'image.required' => ' No se selecciono ningun archivo.',
+            'image.image' => 'Debe de ser un archivo de tipo imagen.',
+            'image.mimes' => 'El archcivo no tiene extencion de imagen (jpg, png, gif, jpeg, svg).',
+            'image.max' => 'El archivo es demaciado grande',
+            'section.required' => 'La imagen es requerida',
+            'description.required' => 'Se requiere una descripción para el medio'
         ]);
-        $nuevo = new Media();
-        $nuevo = $request->all();
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/storage');
-            $image->move($destinationPath, $name);
-            $nuevo['image'] = $name;
-        }   
-        Media::create($nuevo);
-        return redirect()->route('dashboard', compact('media'))->with('success', 'Media created successfully.');
+
+        $medio = Media::create($request->all());
+        if($request->hasFile('image')){
+            $imagenUpload = $request->file('image')->store('media'); # medios/nombre_imagen.jpg
+            $imagenUpload = explode('/', $imagenUpload)[1]; # nombre_imagen.jpg
+            $medio->image = $imagenUpload;
+            $medio->save();
+            return redirect()->route('dashboard')->with('succes','Imagen guardada con exito');
+        }
+        
     }
 
-    /** funcion para actualizar un registro en la tabla*/
-    public function update(Request $request, $id)
-    {
+    // FUNCIÓN PARA EDITAR UN MEDIO
+
+    public function edit($id){
+        // RECUPERA EL OBJETO A EDITAR DE LA BASE DE DATOS
         $media = Media::find($id);
-        $media->name = $request->name;
-        $media->image = $request->image;      
-        $media->description = $request->description;  
-        $media->save();
-        return view('dashboard');
+
+        return view('edit-media', compact('media'));
+
+    }
+    //FUNCIÓN PARA ACTUALIZAR UN MEDIO
+    public function update(Request $request, $id){
+        echo('Aqui se actualizara el medio');
     }
 
-    /** funcion para eliminar un registro en la tabla*/
-    public function delete($id)
-    {
-        $media = Media::find($id);
-        $media->delete();
-        return view('dashboard');
-    }
+    // FUNCIÓN PARA ELIMINAR UN REGISTRO
 
-    /** funcion para buscar un registro en la tabla*/
-    public function search($id)
-    {
-        $media = Media::find($id);
-        print_r($media);
-        return view('dashboard');
+    public function delete($id){
+        echo('Se eliminara un registro');
     }
 }
